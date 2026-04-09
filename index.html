@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI ADDI CANGGIH - GANTENG EDITION</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;900&display=swap');
+    
+    * { margin:0; padding:0; box-sizing:border-box; }
+    
+    :root {
+      --bg-dark: #000000;
+      --card-bg: #0a0a0a;
+      --text-color: #ffffff;
+      /* Warna ganteng gonta-ganti di definisikan di animasi @keyframes */
+    }
+
+    body, html {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-color);
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* --- LAYAR INTRO GOKIL --- */
+    #intro-screen {
+      position: fixed; inset: 0; background: #000;
+      display: flex; flex-direction: column; justify-content: center;
+      align-items: center; z-index: 10000;
+      transition: transform 1s cubic-bezier(0.85, 0, 0.15, 1), opacity 1s;
+    }
+    .intro-logo {
+      font-size: 5rem; font-weight: 900;
+      animation: neonGlow 2s infinite alternate;
+    }
+    .loader {
+      width: 200px; height: 3px; background: #1a1a1a;
+      margin-top: 30px; position: relative; overflow: hidden;
+      border-radius: 10px;
+    }
+    .loader::before {
+      content: ''; position: absolute; height: 100%;
+      background: linear-gradient(90deg, #00ffcc, #cc00ff);
+      width: 0%; animation: load 2.5s forwards;
+    }
+    @keyframes load { 100% { width: 100%; } }
+
+    /* --- MAIN APP LAYOUT --- */
+    #app-content {
+      display: none; height: 100vh;
+      align-items: center; justify-content: center; padding: 20px;
+      opacity: 0; transition: opacity 0.8s;
+    }
+
+    .chat-box {
+      width: 100%; max-width: 900px; height: 90vh;
+      background: var(--card-bg);
+      border-radius: 30px;
+      display: flex; flex-direction: column;
+      overflow: hidden;
+      position: relative;
+      /* Animasi Border Ganteng */
+      border: 2px solid transparent;
+      animation: borderNeonGlow 3s infinite alternate;
+    }
+
+    /* --- HEADER --- */
+    .header {
+      padding: 20px; text-align: center;
+      background: rgba(0, 0, 0, 0.5);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .header h1 {
+      font-size: 2.2em; font-weight: 900; letter-spacing: 2px;
+      animation: neonGlow 3s infinite alternate;
+    }
+    .header p { font-size: 0.7rem; color: #444; margin-top: 5px; }
+
+    /* --- MESSAGES AREA --- */
+    .messages {
+      flex: 1; padding: 25px; overflow-y: auto;
+      display: flex; flex-direction: column; gap: 20px;
+      scrollbar-width: none;
+    }
+    .messages::-webkit-scrollbar { display: none; }
+
+    .message { max-width: 85%; padding: 15px 22px; border-radius: 20px; line-height: 1.6; font-size: 0.95rem; }
+    
+    .user {
+      align-self: flex-end; background: #fff; color: #000;
+      font-weight: 600; border-bottom-right-radius: 2px;
+    }
+    .ai {
+      align-self: flex-start; background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-bottom-left-radius: 2px; white-space: pre-wrap;
+    }
+
+    /* --- INPUT AREA --- */
+    .input-area {
+      padding: 20px; background: rgba(0, 0, 0, 0.5);
+      display: flex; gap: 15px; border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    input {
+      flex: 1; padding: 18px 25px; border: 1px solid #222;
+      border-radius: 50px; background: #111; color: white;
+      font-size: 1em; outline: none; transition: 0.3s;
+    }
+    input:focus { border-color: #00ffcc; background: #000; }
+    
+    button {
+      padding: 18px 30px; border: none; border-radius: 50px;
+      background: #fff; color: #000;
+      font-weight: 900; cursor: pointer; transition: 0.3s;
+    }
+    button:hover { transform: scale(1.1) rotate(-3deg); background: #00ffcc; }
+
+    /* --- FLOATING TIKTOK BUTTON (MYALA) --- */
+    .tiktok-float {
+      position: fixed; bottom: 30px; right: 30px;
+      z-index: 1000; text-decoration: none;
+      display: flex; align-items: center; gap: 10px;
+      background: white; color: black;
+      padding: 12px 25px; border-radius: 50px;
+      font-weight: 900; font-size: 0.8rem;
+      animation: neonGlow 1s infinite alternate;
+    }
+    .tiktok-float:hover { transform: scale(1.1); background: #000; color: white; }
+
+    /* --- KEYFRAMES UNTUK GAK GANTI GANTENG EDITION --- */
+    @keyframes neonGlow {
+      0% { color: #00ffcc; filter: drop-shadow(0 0 5px #00ffcc); }
+      33% { color: #cc00ff; filter: drop-shadow(0 0 5px #cc00ff); }
+      66% { color: #ff0050; filter: drop-shadow(0 0 5px #ff0050); }
+      100% { color: #00ffcc; filter: drop-shadow(0 0 5px #00ffcc); }
+    }
+
+    @keyframes borderNeonGlow {
+      0% { border-color: #00ffcc; box-shadow: 0 0 10px rgba(0, 255, 204, 0.3); }
+      33% { border-color: #cc00ff; box-shadow: 0 0 10px rgba(204, 0, 255, 0.3); }
+      66% { border-color: #ff0050; box-shadow: 0 0 10px rgba(255, 0, 80, 0.3); }
+      100% { border-color: #00ffcc; box-shadow: 0 0 10px rgba(0, 255, 204, 0.3); }
+    }
+
+  </style>
+</head>
+<body>
+
+  <div id="intro-screen">
+    <div class="intro-logo">AI ADDI</div>
+    <div class="loader"></div>
+    <p style="color: #444; margin-top: 15px; font-size: 0.6rem; letter-spacing: 3px;">INITIALIZING SUPER BRAIN</p>
+  </div>
+
+  <div id="app-content">
+    <div class="chat-box">
+      <div class="header">
+        <h1>AI ADDI CANGGIH</h1>
+        <p>created by addi • powered by gemini (ganteng edition)</p>
+      </div>
+      
+      <div class="messages" id="messages">
+        <div class="message ai">
+          Yo user! Gue AI addi Canggih versi bantuan gemini. Gue udah di-upgrade biar tampilannya ganteng maksimal. Mau tanya apa hari ini? SIUUUU!
+        </div>
+      </div>
+      
+      <div class="input-area">
+        <input type="text" id="userInput" placeholder="Tanya apa aja ke AI ADDI..." autocomplete="off">
+        <button onclick="sendMessage()">Kirim</button>
+      </div>
+    </div>
+  </div>
+
+  <a href="https://www.tiktok.com/@addisiuuuuuuiu" target="_blank" class="tiktok-float">
+    <i class="fab fa-tiktok"></i> FOLLOW CREATOR
+  </a>
+
+  <script>
+    // MASUKKAN API KEY GEMINI LO DI SINI
+    const GEMINI_KEY = "AIzaSyArxAjKDDqqeGTJGIsGFSO17yhrZRWPQ5I"; 
+    
+    const messagesDiv = document.getElementById('messages');
+    const userInput = document.getElementById('userInput');
+
+    // INTRO LOGIC
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('intro-screen').style.transform = 'translateY(-100%) scale(2)';
+        document.getElementById('intro-screen').style.opacity = '0';
+        setTimeout(() => {
+          document.getElementById('intro-screen').style.display = 'none';
+          document.getElementById('app-content').style.display = 'flex';
+          setTimeout(() => {
+            document.getElementById('app-content').style.opacity = '1';
+          }, 100);
+        }, 800);
+      }, 2800);
+    });
+
+    async function sendMessage() {
+      const text = userInput.value.trim();
+      if (!text) return;
+
+      // Tampilkan pesan user
+      const userMsg = document.createElement('div');
+      userMsg.className = 'message user';
+      userMsg.textContent = text;
+      messagesDiv.appendChild(userMsg);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+      userInput.value = '';
+
+      // Thinking State
+      const aiId = "ai-" + Date.now();
+      const typing = document.createElement('div');
+      typing.className = 'message ai';
+      typing.id = aiId;
+      typing.textContent = 'Lagi mikir keras... ⚡';
+      messagesDiv.appendChild(typing);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+      try {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_KEY}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: `Nama Anda AI ADDI, dibuat oleh addi. Jawablah pertanyaan ini dengan gaul (gue/lo) dan asik, sering tambahkan kata SIUUU: ${text}` }] }]
+          })
+        });
+
+        const data = await res.json();
+        
+        // Cek error dari Gemini
+        if(data.error) {
+           throw new Error(data.error.message);
+        }
+
+        const reply = data.candidates[0].content.parts[0].text;
+        
+        // Filter bahasa agar gaul
+        let gaulReply = reply.replace(/Saya/g, "Gue").replace(/Anda/g, "Lo");
+
+        typing.remove();
+
+        const aiMsg = document.createElement('div');
+        aiMsg.className = 'message ai';
+        aiMsg.innerHTML = `<b>AI ADDI:</b><br>${gaulReply}`;
+        messagesDiv.appendChild(aiMsg);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+      } catch (err) {
+        typing.remove();
+        const errMsg = document.createElement('div');
+        errMsg.className = 'message ai';
+        errMsg.style.color = '#ff0050';
+        errMsg.textContent = "Error bos! API Key Gemini lo udah bener belom? Cek internet juga!";
+        messagesDiv.appendChild(errMsg);
+      }
+    }
+
+    // Kirim dengan tombol Enter
+    userInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
+  </script>
+</body>
+</html>
